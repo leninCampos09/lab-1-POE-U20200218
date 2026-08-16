@@ -42,6 +42,40 @@ namespace lab_1_POE_U20200218
 
             CreateActionIcons();
             LoadData();
+
+            // Ajustar comportamiento del layout según el estado de la ventana
+            this.Resize += FrmAdminEmpleados_Resize;
+            // Aplicar una vez para el estado inicial
+            UpdateLayoutBasedOnWindowState();
+        }
+
+        private void FrmAdminEmpleados_Resize(object? sender, EventArgs e)
+        {
+            UpdateLayoutBasedOnWindowState();
+        }
+
+        private void UpdateLayoutBasedOnWindowState()
+        {
+            try
+            {
+                // Cuando la ventana está maximizada queremos que el DataGridView llene todo el espacio
+                if (this.WindowState == FormWindowState.Maximized)
+                {
+                    dgvEmpleados.Dock = DockStyle.Fill;
+                    dgvEmpleados.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                }
+                else
+                {
+                    // Restaurar comportamiento original (no Dock, usar Anchors y tamaño original)
+                    dgvEmpleados.Dock = DockStyle.None;
+                    dgvEmpleados.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+                    dgvEmpleados.Location = new Point(12, 12);
+                    dgvEmpleados.Size = new Size(760, 380);
+                    // En modo no-maximizado se puede usar ajuste automático por contenido
+                    dgvEmpleados.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                }
+            }
+            catch { }
         }
 
         private void dgvEmpleados_CellContentClick(object sender, DataGridViewCellEventArgs e)
